@@ -1,7 +1,7 @@
 function [ K ] = StiffnessSpring( E,C,coor,area,v,NumEle,NumDof )
 %
 % Stiffness matrix for each rod element 
-% fsdafa
+%
 % Inputs
 % E is the modulus of elastcity of the element
 % C is the connectivity matrix

@@ -3,7 +3,7 @@
 % http://www.ce.memphis.edu/7117/FEM_codes/Camp's_code/Camp_Matlab_code.html
 %
 %% Sample FEM code for CEE 2333 Sec 1020
-% ergersg
+%
 %Clear variables and MATLAB workspace
 clear all;
 clc;
