@@ -45,6 +45,7 @@ headerlinesIn = 2;
 geom = importdata(filename,delimiterIn,headerlinesIn)
 
 xx(1:NumNod) = geom.data(1:NumNod,2);
+yy(1:NumNod) = geom.data(1:NumNod,3);
 
 %Element information
 filename = 'elements.csv';
@@ -71,7 +72,7 @@ bcValue(1:NumDof) = boundary.data(1:NumDof,3)
 %
 disp("Forming stiffness matrix");
 
-        K = StiffnessSpring(E,C,xx,t,v,NumElem,NumDof);
+        K = StiffnessSpring(E,C,xx,yy,t,v,NumElem,NumDof);
 
 disp("Applying boundary conditions");
 %

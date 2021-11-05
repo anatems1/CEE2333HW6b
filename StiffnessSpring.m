@@ -1,4 +1,4 @@
-function [ K ] = StiffnessSpring( E,C,coor,area,v,NumEle,NumDof )
+function [ K ] = StiffnessSpring( E,C,coorx,coory,area,v,NumEle,NumDof )
 %
 % Stiffness matrix for each rod element 
 %
@@ -21,10 +21,14 @@ for ii = 1:NumEle %For each element
 %
 %  Determine global coordinates of the nodes of the elements
 %
-    X1 = coor(C(ii,1)); %x and y coordinates of the first node of the element
-    X2 = coor(C(ii,2)); %x and y coordinates of the second node of the element
-	X3 = coor(C(ii,3)); %x and y coordinates of the third node of the element
-	X4 = coor(C(ii,4)); %x and y coordinates of the fourth node of the element
+    X1 = coorx(C(ii,1)); %x and y coordinates of the first node of the element
+    Y1 = coory(C(ii,1)); %x and y coordinates of the second node of the element
+	
+    X2 = coorx(C(ii,2));
+    Y2 = coory(C(ii,2));
+    
+    %X3 = coor(C(ii,3)); %x and y coordinates of the third node of the element
+	%X4 = coor(C(ii,4)); %x and y coordinates of the fourth node of the element
 %
 %   Determine the length of the element and the spring stiffness
 %
