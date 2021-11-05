@@ -23,6 +23,7 @@ delimiterIn = ',';
 %
 %General inputs about the problem
 %
+%This is a comment
 filename = 'generalInput.csv';
 headerlinesIn = 0;
 General = importdata(filename,delimiterIn);
