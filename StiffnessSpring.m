@@ -15,7 +15,24 @@ function [ K ] = StiffnessSpring( E,C,coorx,coory,area,v,NumEle,NumDof )
 % K is the global stiffness matrix
 
 K = zeros(NumDof); %Pre-allocated global stiffness matrix of size NumDof x NumDof
-   
+
+ %E matrix for plane stress
+EMAT = zeros(3,3);
+%
+    EMAT(1,1) = E;
+    EMAT(1,2) = v*E;
+    EMAT(1,3) = 0;
+	
+	EMAT(2,1) = v*E;
+    EMAT(2,2) = E;
+    EMAT(2,3) = 0;
+	
+	EMAT(1,1) = 0;
+    EMAT(1,2) = 0;
+    EMAT(1,3) = (1-v)*E/2;
+%HOOKS LAW 2D
+EMAT=EMAT*(1/(1-v^2);
+
 %Developing B matrix
 B = zeros(3,8);
 
@@ -64,8 +81,7 @@ for ji = 1:(NumDof/2)
 end
 
 
-
-
+    
 
 
 
