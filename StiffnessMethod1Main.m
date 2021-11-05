@@ -117,7 +117,7 @@ displacement(locFree,1) = d; %Write displacements of free DOFs into the displace
 % Evaluate element stresses by calling the appropriate stress function
 % corresponding to the element type.
 
-        Se =StressSpring(E,C,xx,t,v,displacement,NumElem);
+ %       Se =StressSpring(E,C,xx,t,v,displacement,NumElem);
 
 
 %==============================================================
@@ -129,7 +129,7 @@ for ip = 1:NumNod %Loop through each node
     node = NumDofPerNode*ip; %'node' variable is basically the y-direction DOF at the node ip, this is a not-so-elegant way of expressing DOFs in terms of number of nodes.
     D(ip,1) = ip; %Column 1: Node number
     D(ip,2) = displacement(node,1); %Column 2: x-displacement
-%    D(ip,3) = displacement(node  ,1); %Column 3: y-displacement
+    D(ip,3) = displacement(node,1); %Column 3: y-displacement
 end
 
 disp("Writing the displacements in the Excel file");
@@ -139,7 +139,7 @@ disp("Writing the displacements in the Excel file");
 header = {'Displacements'};
 
 % output results
-fileName = fullfile(pwd, 'ResultsStiffnessMethod.csv');
+fileName = fullfile(pwd, 'ResultsStiffnessMethod1.csv');
 fid = fopen(fileName, 'wt');
 % Write headers
 fprintf(fid, 'Displacements\n');
@@ -147,17 +147,17 @@ fprintf(fid,'Node \n');
 
 % Write data.
 for i=1:NumNod
-    fprintf(fid, '%f , %f\n',D(i,1:2));
+    fprintf(fid, '%f , %f, %f\n',D(i,1:3));
 end
 
-fprintf(fid, 'Stress\n');
-fprintf(fid,'Element\n');
+% fprintf(fid, 'Stress\n');
+% fprintf(fid,'Element\n');
+% 
+% % Write data.
+% for i=1:NumElem
+%     fprintf(fid,'%i , %f\n',i,Se(i,1));
+% end
 
-% Write data.
-for i=1:NumElem
-    fprintf(fid,'%i , %f\n',i,Se(i,1));
-end
-
-fclose(fid)
+fclose(fid);
 
  
