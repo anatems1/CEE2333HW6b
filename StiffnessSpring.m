@@ -15,17 +15,67 @@ function [ K ] = StiffnessSpring( E,C,coorx,coory,area,v,NumEle,NumDof )
 % K is the global stiffness matrix
 
 K = zeros(NumDof); %Pre-allocated global stiffness matrix of size NumDof x NumDof
+   
+%Developing B matrix
+B = zeros(3,8);
+
+a = (coorx(1,2) - coorx(1,1))/2;
+b = (coory(1,3) - coory(1,2))/2;
+
+for ji = 1:(NumDof/2)
+    xp = coorx(1,ji)- coorx(1,1) - a; %values of x' at each node
+    yp = coory(1,ji)-coory(1,1) - b; %values of y' at each node
+    
+    b1 = yp - b;
+    b2 = yp + b;
+    
+    b3 = xp - a;
+    b4 = xp + a;
+    
+    B(1,1) = b1;
+    B(1,3) = -b1;
+    B(1,5) = b2;
+    B(1,7) = -b2;
+    
+    B(2,2) = b3;
+    B(2,4) = -b4;
+    B(2,6) = b4;
+    B(2,8) = -b3;
+    
+    B(3,1) = b3;
+    B(3,2) = b1;
+    B(3,3) = -b4;
+    B(3,4) = -b1;
+    B(3,5) = b4;
+    B(3,6) = b2;
+    B(3,7) = -b3;
+    B(3,8) = -b4;
+    
+ 
+    ans11 = ['x prime NO:',num2str(ji),' = ',num2str(xp)];
+    ans12 = ['y prime NO:',num2str(ji),' = ',num2str(yp)];
+    ans1 = ['This is the B matrix for Node NO: ',num2str(ji)];
+    disp(ans11);
+    disp(ans12);
+    disp(ans1);
+    B = (1/(4*a*b))*B;
+    
+    disp(B);
+end
+
+
+
+
+
+
+
 
 for ii = 1:NumEle %For each element
     
 %
 %  Determine global coordinates of the nodes of the elements
 %
-    X1 = coorx(C(ii,1)); %x and y coordinates of the first node of the element
-    Y1 = coory(C(ii,1)); %x and y coordinates of the second node of the element
-	
-    X2 = coorx(C(ii,2));
-    Y2 = coory(C(ii,2));
+
     
     %X3 = coor(C(ii,3)); %x and y coordinates of the third node of the element
 	%X4 = coor(C(ii,4)); %x and y coordinates of the fourth node of the element
