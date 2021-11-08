@@ -68,7 +68,7 @@ bcValue(1:NumDof) = boundary.data(1:NumDof,3)
 %
 disp("Forming stiffness matrix");
 
-        K = StiffnessSpring(E,C,xx,yy,t,v,NumElem,NumDof);
+        K = StiffnessSpring2(E,C,xx,yy,t,v,NumElem,NumDof);
 
 disp("Applying boundary conditions");
 %

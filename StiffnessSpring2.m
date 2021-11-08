@@ -35,6 +35,8 @@ EMAT = zeros(3,3);
 %HOOKS LAW 2D
 EMAT = EMAT*(1/(1-vpois^2));
 
+disp(EMAT);
+
 %Developing B matrix
 B = zeros(3,8);
 
@@ -51,21 +53,21 @@ msum = 0;
 nsum =0;
 
 for ji = 1:2
-    xp = coorx(1,ji)- coorx(1,1) - a; %values of x' at each node
-    x_gs = (t_gs(1,ji)*2*a + 2*a)/2
+    %xp = coorx(1,ji)- coorx(1,1) - a; %values of x' at each node
+    x_gs = (t_gs(1,ji)*2*a + 2*a)/2; %gauss x prime value
     
     Wi1 = Wi(1,ji);
     for jj = 1:2;
         Wj1 = Wj(1,jj);
         
-        yp = coory(1,ji)-coory(1,1) - b; %values of y' at each node
-        y_gs = (t_gs(1,jj)*2*b + 2*b)/2
+        %yp = coory(1,ji)-coory(1,1) - b; %values of y' at each node
+        y_gs = (t_gs(1,jj)*2*b + 2*b)/2; %gauss y prime value
         
-        b1 = yp - b;
-        b2 = yp + b;
+        b1 = y_gs - b;
+        b2 = y_gs + b;
 
-        b3 = xp - a;
-        b4 = xp + a;
+        b3 = x_gs - a;
+        b4 = x_gs + a;
 
         B(1,1) = b1;
         B(1,3) = -b1;
@@ -86,22 +88,22 @@ for ji = 1:2
         B(3,7) = -b3;
         B(3,8) = -b4;
         
-        ans11 = ['x prime NO:',num2str(ji),' = ',num2str(xp)];
-        ans12 = ['y prime NO:',num2str(ji),' = ',num2str(yp)];
+        ans11 = ['x prime NO:',num2str(ji),' = ',num2str(x_gs)];
+        ans12 = ['y prime NO:',num2str(ji),' = ',num2str(y_gs)];
         ans1 = ['This is the B matrix for Node NO: ',num2str(ji)];
         disp(ans11);
         disp(ans12);
         disp(ans1);
         B = (1/(4*a*b))*B;
         disp(B);
-        msum = msum + Wi1*Wj1*transpose(B)*EMAT*B
+        msum = msum + Wi1*Wj1*transpose(B)*EMAT*B;
     end
  
-    nsum = nsum + msum
+    nsum = nsum + msum;
 
 end
 
-K = 1*a*b*nsum
+K = 1*a*b*nsum;
 
 
 
