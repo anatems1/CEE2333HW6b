@@ -86,7 +86,7 @@ for ji = 1:2
         B(3,5) = b4;
         B(3,6) = b2;
         B(3,7) = -b3;
-        B(3,8) = -b4;
+        B(3,8) = -b2;
         
         ans11 = ['x prime NO:',num2str(ji),' = ',num2str(x_gs)];
         ans12 = ['y prime NO:',num2str(ji),' = ',num2str(y_gs)];

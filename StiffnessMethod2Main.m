@@ -124,8 +124,8 @@ D = zeros(NumNod,3); %Pre-allocate a matrix D to store the displacements. The nu
 for ip = 1:NumNod %Loop through each node
     node = NumDofPerNode*ip; %'node' variable is basically the y-direction DOF at the node ip, this is a not-so-elegant way of expressing DOFs in terms of number of nodes.
     D(ip,1) = ip; %Column 1: Node number
-    D(ip,2) = displacement(node,1); %Column 2: x-displacement
-    D(ip,3) = displacement(node,1); %Column 3: y-displacement
+    D(ip,2) = displacement(ip*2-1,1); %Column 2: x-displacement
+    D(ip,3) = displacement(ip*2,1); %Column 3: y-displacement
 end
 
 disp("Writing the displacements in the Excel file");
