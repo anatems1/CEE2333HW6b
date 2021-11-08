@@ -109,20 +109,22 @@ for ji = 1:2
         disp(B);
         
         
-        curr_sum = Wi1*Wj1*transpose(B)*EMAT*B;%
+        curr_sum = 1*a*b*Wi1*Wj1*transpose(B)*EMAT*B;%
         
         ans2 = ['The global matrix for gauss Node NO: ',num2str(nodenum)];
         disp(ans2);
         disp(curr_sum);
         
         nodenum = nodenum + 1;
+        
+        tot_sum = tot_sum + curr_sum;%
     end
  
-    tot_sum = tot_sum + curr_sum;%
+    
 
 end
 
-K = 1*a*b*tot_sum;
+K = tot_sum;
 
 
 
