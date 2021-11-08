@@ -85,14 +85,12 @@ Felim = zeros(DofFree,1); %Pre-allocate Felim, the force vector corresponding to
 %Copy values of K corresponding to the free DOFs into Kelim.
 %Note that the nested loop below could've been replaced with Kelim = K(loc,loc), which would also be faster.
 %
-fprintf("\n\n The Stiffness matrix after the bc are applied:\n\n");
+
 for i = 1:DofFree %Loop through rows
     for j=1:DofFree %Loop through columns
-        Kelim(i,j) = K(locFree(i),locFree(j));  
+        Kelim(i,j) = K(locFree(i),locFree(j))  
     end
 end
-
-disp(Kelim);
 %
 %Copy values of F corresponding to the free DOFs into Felim.
 %Note that the loop below could've been replaced with Felim(:,1) = F(loc),which would also be faster.

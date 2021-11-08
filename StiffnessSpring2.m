@@ -35,6 +35,7 @@ EMAT = zeros(3,3);
 %HOOKS LAW 2D
 EMAT = EMAT*(1/(1-vpois^2));
 
+fprintf("\nThe Plane Stress [E] matrix is:\n");
 disp(EMAT);
 
 %Developing B matrix
@@ -98,7 +99,7 @@ for ji = 1:2
         
         ans11 = ['x prime NO:',num2str(ji),' = ',num2str(x_gs)];
         ans12 = ['y prime NO:',num2str(jj),' = ',num2str(y_gs)];
-        ans1 = ['This is the B matrix for Node NO: ',num2str(nodenum)];
+        ans1 = ['This is the B matrix for gauss Node NO: ',num2str(nodenum)];
         disp(ans11);
         disp(ans12);
         disp(ans1);
@@ -110,6 +111,9 @@ for ji = 1:2
         
         curr_sum = Wi1*Wj1*transpose(B)*EMAT*B;%
         
+        ans2 = ['The global matrix for gauss Node NO: ',num2str(nodenum)];
+        disp(ans2);
+        disp(curr_sum);
         
         nodenum = nodenum + 1;
     end
