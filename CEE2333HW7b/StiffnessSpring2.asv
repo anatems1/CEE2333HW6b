@@ -44,7 +44,7 @@ t_gs = [-1/sqrt(3),1/sqrt(3)];
 
 K = zeros(12,12);
 Ktemp = zeros(8,8);
-
+Ktemp_glob =- zeros(12,12)
 
 %transform coordinates
 for  i = 1:NumEle
@@ -134,7 +134,7 @@ for  i = 1:NumEle
              
             for ti = 1:8
                for tz = 1:8
-                    K(globloc(1,ti),globloc(1,tz)) = K(globloc(1,ti),globloc(1,tz)) + Ktemp(ti,tz)
+                    K(globloc(1,ti),globloc(1,tz)) = K(globloc(1,ti),globloc(1,tz)) + Ktemp(ti,tz);
                end
             end
             
@@ -145,6 +145,7 @@ for  i = 1:NumEle
    
 end
 
+disp(K);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
