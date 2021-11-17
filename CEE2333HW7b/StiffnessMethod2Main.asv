@@ -68,8 +68,8 @@ bcValue(1:NumDof) = boundary.data(1:NumDof,3)
 %
 fprintf("Forming stiffness matrix\n\n");
 fprintf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n");
-        
-    K = StiffnessSpring2(E,C,xx,yy,t,v,NumElem,NumDof);
+strainmat = zeros(3,
+        K = StiffnessSpring2(E,C,xx,yy,t,v,NumElem,NumDof);
 
 disp("Applying boundary conditions");
 %
@@ -117,7 +117,7 @@ displacement(locFree,1) = d; %Write displacements of free DOFs into the displace
 % Evaluate element stresses by calling the appropriate stress function
 % corresponding to the element type.
 
-  Se =StressSpring2(E,C,xx,yy,t,v,displacement,NumElem);
+    %   Se =StressSpring2(E,C,xx,t,v,displacement,NumElem);
 
 
 %==============================================================

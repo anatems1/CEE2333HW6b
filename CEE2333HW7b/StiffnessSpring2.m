@@ -57,9 +57,9 @@ for  i = 1:NumEle
     end
     
     for zt = 1:2
-        xi = (t_gs(1,zt))%*2 + 2)/2;
+        xi = (t_gs(1,zt));%*2 + 2)/2;
         for xt = 1:2
-            nu = (t_gs(1,xt))%*2 + 2)/2;
+            nu = (t_gs(1,xt));%*2 + 2)/2;
 
             x = locx(1,1)*0.25*(1-xi)*(1-nu) + locx(1,2)*0.25*(1+xi)*(1-nu) + locx(1,3)*0.25*(1+xi)*(1+nu) + locx(1,4)*0.25*(1-xi)*(1+nu);
             y = locy(1,1)*0.25*(1-xi)*(1-nu) + locy(1,2)*0.25*(1+xi)*(1-nu) + locy(1,3)*0.25*(1+xi)*(1+nu) + locy(1,4)*0.25*(1-xi)*(1+nu);
@@ -159,6 +159,9 @@ for  i = 1:NumEle
             
             disp(ans1);
             disp(Ktemp_glob);
+            
+            
+            
             
         end
     end
