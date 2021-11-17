@@ -143,29 +143,36 @@ fileName = fullfile(pwd, 'ResultsStiffnessMethod1.csv');
 fid = fopen(fileName, 'wt');
 % Write headers
 fprintf(fid, 'Displacements\n');
-fprintf(fid,'Node \n');
+fprintf(fid,'%s, %s, %s','Node','u','v');
 
 % Write data.
 for i=1:NumNod
-    fprintf(fid, '%f , %f, %f\n',D(i,1:3));
+    fprintf(fid, '\n%f , %f, %f',D(i,1:3));
 end
 
 elemname = zeros(1,NumElem*4);
+locnode = zeros(1,NumElem*4);
+globnode = zeros(1,NumElem*4);
+
 for jz = 1:NumElem*4
     if jz <= NumElem*2 
-        elemname(1,jz) = 1;
+        elemname(1,jz) = "1";
+        locnode(1,jz) = jz;
+        globnode(1,jz) = C(1,jz);
     else
-        elemname(1,jz) = 2;
+        elemname(1,jz) = "2";
+        locnode(1,jz) = jz-4;
+        globnode(1,jz) = C(2,jz-4);
     end
 end
 
-fprintf(fid, 'Stress\n');
-fprintf(fid,'Element',elemname(1:NumElem*4));
-frpintf(fid,'Node\n');
+fprintf(fid, '\nStress\n');
+%fprintf(fid,elemname(1:NumElem*4));
+fprintf(fid,'%s, %s, %s, %s, %s, %s', 'Element','Gauss Node','Global Node','Stress-x','Stress-y','Stress-xy');
 
 % Write data.
-for i=1:NumElem*2
-    fprintf(fid,'%i , %f\n',i,Se(i,1));
+for i=1:NumElem*4
+    fprintf(fid,'\n%i ,%i, %i, %f, %f, %f',elemname(1,i),locnode(1,i),globnode(1,i),Se(1,i),Se(2,i),Se(3,i));
  end
 
 fclose(fid);
