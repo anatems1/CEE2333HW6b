@@ -44,10 +44,11 @@ t_gs = [-1/sqrt(3),1/sqrt(3)];
 
 K = zeros(12,12);
 Ktemp = zeros(8,8);
-Ktemp_glob =- zeros(12,12)
+Ktemp_glob =- zeros(12,12);
 
 %transform coordinates
 for  i = 1:NumEle
+    nodenum = 0;
     locx = zeros(1,4);
     locy = zeros(1,4);
     for ji = 1:4
@@ -56,15 +57,15 @@ for  i = 1:NumEle
     end
     
     for zt = 1:2
-        xi = (t_gs(1,zt)*2 + 2)/2;
+        xi = (t_gs(1,zt));%*2 + 2)/2;
         for xt = 1:2
-            nu = (t_gs(1,xt)*2 + 2)/2;
+            nu = (t_gs(1,xt));%*2 + 2)/2;
 
             x = locx(1,1)*0.25*(1-xi)*(1-nu) + locx(1,2)*0.25*(1+xi)*(1-nu) + locx(1,3)*0.25*(1+xi)*(1+nu) + locx(1,4)*0.25*(1-xi)*(1+nu);
             y = locy(1,1)*0.25*(1-xi)*(1-nu) + locy(1,2)*0.25*(1+xi)*(1-nu) + locy(1,3)*0.25*(1+xi)*(1+nu) + locy(1,4)*0.25*(1-xi)*(1+nu);
 
             %del_x/del_xi = (a + bnu + cxi + dnu*xi)
-            xb = (-locx(1,1) - locx(1,2) + locx(1,3) + locx(1,4))
+            xb = (-locx(1,1) - locx(1,2) + locx(1,3) + locx(1,4));
             xc = (-locx(1,1) + locx(1,2) + locx(1,3) - locx(1,4));
             xd = (locx(1,1) - locx(1,2) + locx(1,3) - locx(1,4));
             xb = xb * 0.25;
@@ -118,7 +119,7 @@ for  i = 1:NumEle
 
             B = B1*B2*B3;
 
-            Ktemp = Ktemp + Wi(1,zt)*Wj(1,zt)*(transpose(B)*EMAT)*B*det(J);
+            Ktemp = Wi(1,zt)*Wj(1,zt)*(transpose(B)*EMAT)*B*det(J);
            
             
             %convert local stiffness to global stiffness
@@ -130,20 +131,44 @@ for  i = 1:NumEle
                globloc(1,t*2) = globlocy;
               
             end   
-            disp(globloc);
+            %disp(globloc);
              
-            for ti = 1:8
-               for tz = 1:8
+
+            Ktemp_glob = zeros(12,12);
+            for ti = 1:8 %row
+               for tz = 1:8 %column
                     K(globloc(1,ti),globloc(1,tz)) = K(globloc(1,ti),globloc(1,tz)) + Ktemp(ti,tz);
+                    Ktemp_glob(globloc(1,ti),globloc(1,tz)) = Ktemp(ti,tz);
                end
             end
             
-            disp(K);
+            nodenum = nodenum + 1;
+            %disp(K);
+            ans11 = ['nu',num2str(xt),' = ',num2str(nu)];
+            ans12 = ['xi',num2str(zt),' = ',num2str(xi)];
+            ans3 = ['This is the element B matrix for element NO:',num2str(i),' and gauss Node NO: ',num2str(nodenum)];
+            ans1 = ['This is the element stiffness matrix for element NO:',num2str(i),' and gauss Node NO: ',num2str(nodenum)];
+            disp(ans11);
+            disp(ans12);
+
+            disp(ans3);
+            disp(B);
+            
+            %disp(ans1);
+            %disp(Ktemp);
+            
+            disp(ans1);
+            disp(Ktemp_glob);
+            
+            
+            
+            
         end
     end
 
    
 end
+
 
 disp(K);
 

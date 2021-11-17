@@ -154,7 +154,7 @@ fprintf(fid, 'Stress\n');
 fprintf(fid,'Element\n');
 
 % Write data.
-for i=1:NumElem
+for i=1:NumElem*2
     fprintf(fid,'%i , %f\n',i,Se(i,1));
  end
 
