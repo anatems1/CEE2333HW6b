@@ -6,8 +6,7 @@ Node, u, v
 4.000000 , -0.000576, -0.001623
 5.000000 , -0.000000, 0.000185
 6.000000 , 0.000576, -0.001623
-Stress
-Element, Gauss Node, Global Node, Stress-x, Stress-y, Stress-xy
+StrElementement, Gauss Node, Global Node, Stress-x, Stress-y, Stress-xy
 1 ,1, 1, -0.063987, -3.708878, 0.486940
 1 ,2, 2, 0.615018, -0.637962, 0.655274
 1 ,3, 5, 0.743063, -2.475177, 1.356720
