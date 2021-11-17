@@ -117,7 +117,7 @@ displacement(locFree,1) = d; %Write displacements of free DOFs into the displace
 % Evaluate element stresses by calling the appropriate stress function
 % corresponding to the element type.
 
- %       Se =StressSpring(E,C,xx,t,v,displacement,NumElem);
+       Se =StressSpring2(E,C,xx,t,v,displacement,NumElem);
 
 
 %==============================================================
@@ -150,13 +150,13 @@ for i=1:NumNod
     fprintf(fid, '%f , %f, %f\n',D(i,1:3));
 end
 
-% fprintf(fid, 'Stress\n');
-% fprintf(fid,'Element\n');
-% 
-% % Write data.
-% for i=1:NumElem
-%     fprintf(fid,'%i , %f\n',i,Se(i,1));
-% end
+fprintf(fid, 'Stress\n');
+fprintf(fid,'Element\n');
+
+% Write data.
+for i=1:NumElem
+    fprintf(fid,'%i , %f\n',i,Se(i,1));
+ end
 
 fclose(fid);
 

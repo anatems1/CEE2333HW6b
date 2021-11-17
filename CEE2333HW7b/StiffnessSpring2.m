@@ -133,7 +133,7 @@ for  i = 1:NumEle
             end   
             %disp(globloc);
              
-            %DREAM CODE
+
             Ktemp_glob = zeros(12,12);
             for ti = 1:8 %row
                for tz = 1:8 %column
@@ -154,8 +154,8 @@ for  i = 1:NumEle
             disp(ans3);
             disp(B);
             
-            disp(ans1);
-            disp(Ktemp);
+            %disp(ans1);
+            %disp(Ktemp);
             
             disp(ans1);
             disp(Ktemp_glob);
