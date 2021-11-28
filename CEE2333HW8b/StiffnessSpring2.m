@@ -42,9 +42,9 @@ Wi = [1, 1];
 Wj = [1, 1];
 t_gs = [-1/sqrt(3),1/sqrt(3)];
 
-K = zeros(12,12);
+K = zeros(NumDof,NumDof);
 Ktemp = zeros(8,8);
-Ktemp_glob =- zeros(12,12);
+Ktemp_glob =- zeros(NumDof,NumDof);
 
 %transform coordinates
 for  i = 1:NumEle
@@ -134,7 +134,7 @@ for  i = 1:NumEle
             %disp(globloc);
              
 
-            Ktemp_glob = zeros(12,12);
+            Ktemp_glob = zeros(NumDof,NumDof);
             for ti = 1:8 %row
                for tz = 1:8 %column
                     K(globloc(1,ti),globloc(1,tz)) = K(globloc(1,ti),globloc(1,tz)) + Ktemp(ti,tz);
