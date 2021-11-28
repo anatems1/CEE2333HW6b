@@ -154,16 +154,10 @@ elemname = zeros(1,NumElem*4);
 locnode = zeros(1,NumElem*4);
 globnode = zeros(1,NumElem*4);
 
-for jz = 1:NumElem*4
-    if jz <= NumElem*2 
+for jz = 1:NumElem*4 
         elemname(1,jz) = "1";
         locnode(1,jz) = jz;
         globnode(1,jz) = C(1,jz);
-    else
-        elemname(1,jz) = "2";
-        locnode(1,jz) = jz-4;
-        globnode(1,jz) = C(2,jz-4);
-    end
 end
 
 fprintf(fid, '\nStress\n');
