@@ -73,13 +73,13 @@ end
 switch(choice)
     case 1 %full
         NumElem = rad_el*tang_el;
-        NumDof = NumElem*2;
         numnodes = (rad_el+1)*(tang_el);
+        NumDof = numnodes*2;
         loop2 = tang_el;
     case 2 %quarter circle
         NumElem = rad_el*tang_el/4;
-        NumDof = NumElem*2;
-        numnodes = (rad_el+1)*(tang_el)/4;
+        numnodes = (rad_el+1)*((tang_el)/4+1);
+        NumDof = numnodes*2;
         loop2 = tang_el/4 + 1;
 end
 
@@ -93,6 +93,8 @@ del_rad = 2*pi()/tang_el;
 globnodecords = zeros(numnodes,3);
 nodenum = 0;
 
+bcType = zeros(NumDof,1); %boundary type --> 1 = fixed, 0 = free (forces)
+bcValue = zeros(NumDof,1); %forces
 
 
 for qz = 1:rad_el+1
@@ -105,8 +107,19 @@ for qz = 1:rad_el+1
         globnodecords(nodenum, 1) = nodenum;
         globnodecords(nodenum, 2) = xx(qz,jz);
         globnodecords(nodenum, 3) = yy(qz,jz);
-        if choice == 2
-            
+        if (choice == 1) && (xx(qz,jz) == OD || xx(qz,jz) == -OD)
+            if xx(qz,jz) == OD
+                bcType(nodenum*2) = 1;
+            elseif xx(qz,jz) == -OD
+                bcType(nodenum*2) = 1;
+                bcType(nodenum*2-1) = 1;
+            end
+        elseif choice == 2
+            if ang1 == 0
+                bcType(nodenum*2) = 1;
+            elseif ang1 == pi()/2
+                bcType(nodenum*2-1) = 1;
+            end
         end
     end
 end
