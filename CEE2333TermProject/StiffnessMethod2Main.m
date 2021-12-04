@@ -30,7 +30,22 @@ ID = 2;
 %ask user for angle of loading
 
 % qmag = input('Magnitude of surface load q(lbs): ');
+qmag = 1000;
+qang = 45;
 % qang = input('Input angle (in radians) for surface load q: ');
+ang_check = 0;
+while ang_check < 0
+    if qang > 180 || qang < 0
+        fprintf("\nPlease enter an angle between 0 and 180 \n");
+        qang = input('Input angle (in radians) for surface load q: ');
+    else
+        ang_check = 1;
+    end
+end
+
+qang = qang * pi()/180;
+
+
 
 %ask user for material properities
 
@@ -136,7 +151,6 @@ end
 nodenum = nodenum;
 
 
-
 %
 %% Processing step
 %
@@ -145,9 +159,11 @@ nodenum = nodenum;
 %
 fprintf("Forming stiffness matrix\n\n");
 fprintf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n");
-        
-    K = StiffnessSpring2(E,C,xx,yy,t,v,NumElem,NumDof);
 
+Ksetting = 1;
+qsetting = 2;
+    K = StiffnessSpring2(E,C,xx,yy,t,v,NumElem,NumDof,qmag,qang,bcValue,Ksetting);
+    bcValue = StiffnessSpring2(E,C,xx,yy,t,v,NumElem,NumDof,qmag,qang,bcValue,qsetting);
 disp("Applying boundary conditions");
 %
 %Eliminate rows and columns to reduce the problem to only free DOFs

@@ -1,4 +1,4 @@
-function [ Se ] = StressSpring( Emod,C,coorx,coory,area,v,displacement,NumEle )
+function [ Se ] = StressSpring( Emod,C,coorx,coory,area,v,displacement,NumEle)
 % Stress for each rod element [Se]=[D][B]{d}
 
 % Inputs
@@ -15,7 +15,10 @@ function [ Se ] = StressSpring( Emod,C,coorx,coory,area,v,displacement,NumEle )
 % stress as well as zero values for y stress and xy stress for that
 % element.
 
-% Se = zeros(NumEle,3); %Pre-allocated Se array, as defined above
+
+
+
+
 
 Se1 = zeros(3,NumEle*2);
 

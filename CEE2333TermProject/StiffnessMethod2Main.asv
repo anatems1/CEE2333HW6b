@@ -30,8 +30,20 @@ ID = 2;
 %ask user for angle of loading
 
 % qmag = input('Magnitude of surface load q(lbs): ');
+qmag = 1000;
+qang = 20;
 % qang = input('Input angle (in radians) for surface load q: ');
+ang_check = 0;
+while ang_check < 0
+    if qang > 180 || qang < 0
+        fprintf("\nPlease enter an angle between 0 and 180 \n");
+        qang = input('Input angle (in radians) for surface load q: ');
+    else
+        ang_check = 1;
+    end
+end
 
+qang = qang * 
 %ask user for material properities
 
 % E = input('What is the elastic modulus (E - psi) of the material: ');
@@ -73,13 +85,13 @@ end
 switch(choice)
     case 1 %full
         NumElem = rad_el*tang_el;
-        NumDof = NumElem*2;
         numnodes = (rad_el+1)*(tang_el);
+        NumDof = numnodes*2;
         loop2 = tang_el;
     case 2 %quarter circle
         NumElem = rad_el*tang_el/4;
-        NumDof = NumElem*2*;
-        numnodes = (rad_el+1)*(tang_el)/4;
+        numnodes = (rad_el+1)*((tang_el)/4+1);
+        NumDof = numnodes*2;
         loop2 = tang_el/4 + 1;
 end
 
@@ -146,7 +158,7 @@ nodenum = nodenum;
 fprintf("Forming stiffness matrix\n\n");
 fprintf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n");
         
-    K = StiffnessSpring2(E,C,xx,yy,t,v,NumElem,NumDof);
+    K = StiffnessSpring2(E,C,xx,yy,t,v,NumElem,NumDof,qmag,qang,bcValue);
 
 disp("Applying boundary conditions");
 %
