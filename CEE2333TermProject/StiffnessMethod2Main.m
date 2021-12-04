@@ -26,18 +26,6 @@ delimiterIn = ',';
 % ID = input('Inner radius of the circle (in): ');
 OD = 5;
 ID = 2;
-%ask user for number of elements
-
-% rad_el = input('Number of radial elements: ');
-% tang_el = input('Number of tangential elements: ');
-rad_el = 5;
-
-
-%%%%want to make this EVEN numbers onlyy
-tang_el = 20;
-
-
-
 
 %ask user for angle of loading
 
@@ -49,21 +37,67 @@ tang_el = 20;
 % E = input('What is the elastic modulus (E - psi) of the material: ');
 % v = input('What is the materials poisson ratio (v): ');
 
-NumElem = rad_el*tang_el;
-NumDof = NumElem*2;
-%determine x and y coordinates of the circle points
 
-xx = zeros(rad_el+1,tang_el);
-yy = zeros(rad_el+1,tang_el);
+
+%%asks user if the analysis should be a quarter or the full circle
+choice = menu('Please choose analysis option:', 'Full Circle', 'Quarter Circle');
+%ask user for number of elements
+
+% rad_el = input('Number of radial elements: ');
+
+rad_el = 5;
+
+%%%%want to make this EVEN numbers onlyy and the number must be greater
+%%%%than 4
+ev_check = 0;
+%tang_el = input('Number of tangential elements: ');
+tang_el = 20;
+while ev_check < 1
+    if mod(tang_el,2) > 0
+        fprintf("\nPlease enter an even number of elements!!! \n");
+        tang_el = input('Number of tangential elements: ');
+    elseif tang_el <= 4 && choice == 1
+        fprintf("\nPlease enter a number greater than or equal to 4!!! \n");
+        tang_el = input('Number of tangential elements: ');
+    elseif mod(tang_el,4)>0 && choice == 2
+        fprintf("\nSince the analysis is for a quarter circle, the number of elements must be in multiples of 4.... \n");
+        tang_el = input('Number of tangential elements: ');
+    else
+        ev_check = 2;
+    end
+end
+
+
+
+%determines coordinates for full or quarter circle
+switch(choice)
+    case 1 %full
+        NumElem = rad_el*tang_el;
+        NumDof = NumElem*2;
+        numnodes = (rad_el+1)*(tang_el);
+        loop2 = tang_el;
+    case 2 %quarter circle
+        NumElem = rad_el*tang_el/4;
+        NumDof = NumElem*2;
+        numnodes = (rad_el+1)*(tang_el)/4;
+        loop2 = tang_el/4 + 1;
+end
+
+
+%determine x and y coordinates of the circle points
+xx = zeros(rad_el+1,loop2);
+yy = zeros(rad_el+1,loop2);
 
 del_rad = 2*pi()/tang_el;
-numnodes = (rad_el+1)*(tang_el);
+
 globnodecords = zeros(numnodes,3);
 nodenum = 0;
 
+
+
 for qz = 1:rad_el+1
     rad1 = OD - ((qz-1)*(OD-ID)/rad_el);
-    for jz = 1:tang_el
+    for jz = 1:loop2
         ang1 = del_rad*(jz-1);
         xx(qz,jz) = rad1*cos(ang1);
         yy(qz,jz) = rad1*sin(ang1);
@@ -71,6 +105,9 @@ for qz = 1:rad_el+1
         globnodecords(nodenum, 1) = nodenum;
         globnodecords(nodenum, 2) = xx(qz,jz);
         globnodecords(nodenum, 3) = yy(qz,jz);
+        if choice == 2
+            
+        end
     end
 end
 
@@ -79,12 +116,11 @@ C = zeros(NumElem,4);
 for kl = 1:NumElem
         C(kl,1) = pos1;
         C(kl,2) = pos1 + 1;
-        C(kl,3) = pos1 + 21;
-        C(kl,4) = pos1 + 20;
+        C(kl,3) = pos1 + loop2 + 1;
+        C(kl,4) = pos1 + loop2;
         pos1 = pos1 + 1;
 end
 nodenum = nodenum;
-
 
 
 
