@@ -1,4 +1,4 @@
-function [ K ] = StiffnessSpring(Emod,C,coorx,coory,area,v,NumEle,NumDof,qmag,qang,bcValue,mode)
+function [ K ] = StiffnessSpring(Emod,C,coorx,coory,area,v,NumEle,NumDof)
 %
 % Stiffness matrix for each rod element 
 %
@@ -12,6 +12,7 @@ function [ K ] = StiffnessSpring(Emod,C,coorx,coory,area,v,NumEle,NumDof,qmag,qa
 % NumDof is the number of DOFs
 
 % Outputs
+%% 
 % K is the global stiffness matrix
 
 K = zeros(NumDof); %Pre-allocated global stiffness matrix of size NumDof x NumDof
@@ -51,6 +52,12 @@ for  i = 1:NumEle
     nodenum = 0;
     locx = zeros(1,4);
     locy = zeros(1,4);
+    
+    if i == NumEle
+        fprintf("pause");
+    end
+    
+    
     for ji = 1:4
         locx(1,ji) = coorx(1,C(i,ji));
         locy(1,ji) = coory(1,C(i,ji));
@@ -157,9 +164,8 @@ for  i = 1:NumEle
             %disp(ans1);
             %disp(Ktemp);
             
-            disp(ans1);
-            disp(Ktemp_glob);
-            
+           % disp(ans1);
+            %disp(Ktemp_glob);
             
             
             
@@ -172,19 +178,12 @@ end
 fprintf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n");
 
 fprintf("The Global Stiffness Matrix is: \n\n");
-
-if mode == 1
+%% determine which output we are selecting
     K = K
-elseif mode == 2
-    %K = bcValue
-end
-
-
-
-
-
-
-
 
 end
+
+
+
+
 

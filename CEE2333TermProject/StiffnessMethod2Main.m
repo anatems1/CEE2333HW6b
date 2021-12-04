@@ -50,9 +50,10 @@ qang = qang * pi()/180;
 %ask user for material properities
 
 % E = input('What is the elastic modulus (E - psi) of the material: ');
+E = 36000;
 % v = input('What is the materials poisson ratio (v): ');
-
-
+v=0.15;
+t=1;
 
 %%asks user if the analysis should be a quarter or the full circle
 choice = menu('Please choose analysis option:', 'Full Circle', 'Quarter Circle');
@@ -103,6 +104,7 @@ end
 xx = zeros(rad_el+1,loop2);
 yy = zeros(rad_el+1,loop2);
 
+
 del_rad = 2*pi()/tang_el;
 
 globnodecords = zeros(numnodes,3);
@@ -143,13 +145,25 @@ pos1 = 1;
 C = zeros(NumElem,4);
 for kl = 1:NumElem
         C(kl,1) = pos1;
-        C(kl,2) = pos1 + 1;
-        C(kl,3) = pos1 + loop2 + 1;
         C(kl,4) = pos1 + loop2;
+        if mod(kl,tang_el) == 0 && choice == 1
+            C(kl,2) = pos1 + 1 - loop2;
+            C(kl,3) = pos1 + 1;
+        else
+            C(kl,2) = pos1 + 1;
+            C(kl,3) = pos1 + loop2 + 1;
+        end
         pos1 = pos1 + 1;
 end
-nodenum = nodenum;
 
+coorx = zeros(numnodes,1);
+coory = zeros(numnodes,1);
+
+coorx(1:numnodes,1) = globnodecords(1:numnodes,2);
+coory(1:numnodes,1) = globnodecords(1:numnodes,3);
+
+coorx = transpose(coorx);
+coory = transpose(coory);
 
 %
 %% Processing step
@@ -160,10 +174,8 @@ nodenum = nodenum;
 fprintf("Forming stiffness matrix\n\n");
 fprintf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n");
 
-Ksetting = 1;
-qsetting = 2;
-    K = StiffnessSpring2(E,C,xx,yy,t,v,NumElem,NumDof,qmag,qang,bcValue,Ksetting);
-    bcValue = StiffnessSpring2(E,C,xx,yy,t,v,NumElem,NumDof,qmag,qang,bcValue,qsetting);
+    K = StiffnessSpring2(E,C,coorx,coory,t,v,NumElem,NumDof);
+    bcValue = StiffnessSpring2(E,C,coorx,coory,t,v,NumElem,NumDof,qmag,qang,bcValue);
 disp("Applying boundary conditions");
 %
 %Eliminate rows and columns to reduce the problem to only free DOFs
