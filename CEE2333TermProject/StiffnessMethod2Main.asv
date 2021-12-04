@@ -45,13 +45,12 @@ tang_el = 20;
 NumElem = rad_el*tang_el;
 NumDof = NumElem*2;
 %determine x and y coordinates of the circle points
-
 xx = zeros(rad_el+1,tang_el);
 yy = zeros(rad_el+1,tang_el);
 
 del_rad = 2*pi()/tang_el;
 numnodes = (rad_el+1)*(tang_el);
-globnodecords = zeros(numnodes,3);
+nodecords = zeros(numnodes,3);
 nodenum = 0;
 
 for qz = 1:rad_el+1
@@ -61,21 +60,12 @@ for qz = 1:rad_el+1
         xx(qz,jz) = rad1*cos(ang1);
         yy(qz,jz) = rad1*sin(ang1);
         nodenum = nodenum + 1;
-        globnodecords(nodenum, 1) = nodenum;
-        globnodecords(nodenum, 2) = xx(qz,jz);
-        globnodecords(nodenum, 3) = yy(qz,jz);
+        nodecords(nodenum, 1) = nodenum;
+        nodecords(nodenum, ) = xx(qz,jz);
+        nodecords(3,nodenum) = yy(qz,jz);
     end
 end
 
-pos1 = 1;
-C = zeros(NumElem,4);
-for kl = 1:NumElem
-        C(kl,1) = pos1;
-        C(kl,2) = pos1 + 1;
-        C(kl,3) = pos1 + 21;
-        C(kl,4) = pos1 + 20;
-        pos1 = pos1 + 1;
-end
 nodenum = nodenum;
 
 
