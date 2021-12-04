@@ -175,7 +175,7 @@ fprintf("Forming stiffness matrix\n\n");
 fprintf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n");
 
     K = StiffnessSpring2(E,C,coorx,coory,t,v,NumElem,NumDof);
-    bcValue = StiffnessSpring2(E,C,coorx,coory,t,v,NumElem,NumDof,qmag,qang,bcValue);
+    bcValue = circloading(E,C,coorx,coory,t,v,NumElem,NumDof,qmag,qang,bcValue);
 disp("Applying boundary conditions");
 %
 %Eliminate rows and columns to reduce the problem to only free DOFs
