@@ -31,7 +31,14 @@ ID = 2;
 % rad_el = input('Number of radial elements: ');
 % tang_el = input('Number of tangential elements: ');
 rad_el = 5;
+
+
+%%%%want to make this EVEN numbers onlyy
 tang_el = 20;
+
+
+
+
 %ask user for angle of loading
 
 % qmag = input('Magnitude of surface load q(lbs): ');
