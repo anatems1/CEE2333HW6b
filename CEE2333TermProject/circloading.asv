@@ -1,4 +1,4 @@
-function [ bcValue ] = circloading(Emod,C,coorx,coory,area,v,NumEle,NumDof,qmag,qang,bcValue,partial_load,xa,ya)
+function [ bcValue ] = circloading(Emod,C,coorx,coory,area,v,NumEle,NumDof,qmag,qang,bcValue,partial_load)
 %
 % Stiffness matrix for each rod element 
 %
@@ -36,17 +36,30 @@ for  i = 1:NumEle
         locy(1,ji) = coory(1,C(i,ji));
     end
     
-%del_x/del_xi = (a + bnu + cxi + dnu*xi)
-x1 =  locx(1,1) + locx(1,2) + locx(1,3) + locx(1,4);
-xb = (-locx(1,1) - locx(1,2) + locx(1,3) + locx(1,4));
-xc = (-locx(1,1) + locx(1,2) + locx(1,3) - locx(1,4));
-xd = (locx(1,1) - locx(1,2) + locx(1,3) - locx(1,4));
-x1 = x1 * 0.25;
-xb = xb * 0.25;
-xc = xc * 0.25;
-xd = xd * 0.25;
+    
 
-xi1 = 
+nu = -1;
+
+xi = 
+            x = locx(1,1)*0.25*(1-xi)*(1-nu) + locx(1,2)*0.25*(1+xi)*(1-nu) + locx(1,3)*0.25*(1+xi)*(1+nu) + locx(1,4)*0.25*(1-xi)*(1+nu);
+            y = locy(1,1)*0.25*(1-xi)*(1-nu) + locy(1,2)*0.25*(1+xi)*(1-nu) + locy(1,3)*0.25*(1+xi)*(1+nu) + locy(1,4)*0.25*(1-xi)*(1+nu);
+
+            %del_x/del_xi = (a + bnu + cxi + dnu*xi)
+            xb = (-locx(1,1) - locx(1,2) + locx(1,3) + locx(1,4));
+            xc = (-locx(1,1) + locx(1,2) + locx(1,3) - locx(1,4));
+            xd = (locx(1,1) - locx(1,2) + locx(1,3) - locx(1,4));
+            xb = xb * 0.25;
+            xc = xc * 0.25;
+            xd = xd * 0.25;
+
+            yb = (-locy(1,1) - locy(1,2) + locy(1,3) + locy(1,4));
+            yc = (-locy(1,1) + locy(1,2) + locy(1,3) - locy(1,4));
+            yd = (locy(1,1) - locy(1,2) + locy(1,3) - locy(1,4));
+            yb = yb * 0.25;
+            yc = yc * 0.25;
+            yd = yd * 0.25;
+            
+        end
     
 %determine upper and lower bounds for gauss int along surface
 for ii = 1:4

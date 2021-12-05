@@ -53,11 +53,6 @@ for  i = 1:NumEle
     locx = zeros(1,4);
     locy = zeros(1,4);
     
-    if i == NumEle
-        fprintf("pause");
-    end
-    
-    
     for ji = 1:4
         locx(1,ji) = coorx(1,C(i,ji));
         locy(1,ji) = coory(1,C(i,ji));
