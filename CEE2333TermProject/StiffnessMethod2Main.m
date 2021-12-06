@@ -257,16 +257,16 @@ displacement(locFree,1) = d; %Write displacements of free DOFs into the displace
 % Evaluate element stresses by calling the appropriate stress function
 % corresponding to the element type.
 
-  Se =StressSpring2(E,C,xx,yy,t,v,displacement,NumElem);
+  Se =StressSpring2(E,C,coorx,coory,t,v,displacement,NumElem);
 
 
 %==============================================================
 
 % Write displacements to Excel file
-D = zeros(NumNod,3); %Pre-allocate a matrix D to store the displacements. The number of rows is the number of nodes, and there are three columns, as defined below.
+D = zeros(numnodes,3); %Pre-allocate a matrix D to store the displacements. The number of rows is the number of nodes, and there are three columns, as defined below.
 %D(i,:) = [ith node number,ith node x-displacement,ith node y-displacement]
-for ip = 1:NumNod %Loop through each node
-    node = NumDofPerNode*ip; %'node' variable is basically the y-direction DOF at the node ip, this is a not-so-elegant way of expressing DOFs in terms of number of nodes.
+for ip = 1:numnodes %Loop through each node
+    node = 2*ip; %'node' variable is basically the y-direction DOF at the node ip, this is a not-so-elegant way of expressing DOFs in terms of number of nodes.
     D(ip,1) = ip; %Column 1: Node number
     D(ip,2) = displacement(ip*2-1,1); %Column 2: x-displacement
     D(ip,3) = displacement(ip*2,1); %Column 3: y-displacement
@@ -286,7 +286,7 @@ fprintf(fid, 'Displacements\n');
 fprintf(fid,'%s, %s, %s','Node','u','v');
 
 % Write data.
-for i=1:NumNod
+for i=1:numnodes
     fprintf(fid, '\n%f , %f, %f',D(i,1:3));
 end
 
@@ -294,8 +294,8 @@ elemname = zeros(1,NumElem*4);
 locnode = zeros(1,NumElem*4);
 globnode = zeros(1,NumElem*4);
 
-for jz = 1:NumElem*4 
-        elemname(1,jz) = "1";
+for jz = 1:NumElem*4
+        elemname(1,jz) = jz;
         locnode(1,jz) = jz;
         globnode(1,jz) = C(1,jz);
 end
