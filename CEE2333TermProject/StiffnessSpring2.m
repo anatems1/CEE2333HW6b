@@ -174,7 +174,7 @@ fprintf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 fprintf("The Global Stiffness Matrix is: \n\n");
 %% determine which output we are selecting
-    K = K
+    K = K;
 
 end
 

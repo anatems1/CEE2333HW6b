@@ -210,7 +210,7 @@ fprintf("Forming stiffness matrix\n\n");
 fprintf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n");
 
     K = StiffnessSpring2(E,C,coorx,coory,t,v,NumElem,NumDof);
-    bcValue = circloading(E,C,coorx,coory,t,v,tang_el,NumDof,qmag,qang,bcValue,partial_load,xa,ya); %to create the force vector with surface loads
+    bcValue = circloading(E,C,coorx,coory,t,v,tang_el,NumDof,qmag,qang,bcValue,partial_load,xa,ya,choice,tang_el); %to create the force vector with surface loads
 disp("Applying boundary conditions");
 %
 %Eliminate rows and columns to reduce the problem to only free DOFs
