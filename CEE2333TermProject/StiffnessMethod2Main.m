@@ -9,6 +9,7 @@ clear all;
 clc;
 format shortEng;
 
+%test
 %% Pre-processing step 
 %
 % Read inputs from external file

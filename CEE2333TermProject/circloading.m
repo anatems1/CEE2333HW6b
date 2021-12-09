@@ -11,6 +11,7 @@ function [ bcValue ] = circloading(Emod,C,coorx,coory,area,v,NumEle,NumDof,qmag,
 % NumEle is the number of elements
 % NumDof is the number of DOFs
 
+%test
 % Outputs
 %% 
 % K is the global stiffness matrix
