@@ -24,74 +24,65 @@ delimiterIn = ',';
 %General inputs about the problem
 %
 
-% OD = input('Outer radius of the circle (in): ');
-% ID = input('Inner radius of the circle (in): ');
-OD = 5;
-ID = 2;
 
-%ask user for angle of loading
-
-% qmag = input('Magnitude of surface load q(lbs): ');
+OD = 6;
+ID = 3;
 qmag = 1000;
 qang = 45;
-% qang = input('Input angle (in radians) for surface load q: ');
-ang_check = 0;
-while ang_check < 0
-    if qang > 180 || qang < 0
-        fprintf("\nPlease enter an angle between 0 and 180 \n");
-        qang = input('Input angle (in radians) for surface load q: ');
-    else
-        ang_check = 1;
-    end
-end
-
-qang = qang * pi()/180;
-
-
-
-%ask user for material properities
-
-% E = input('What is the elastic modulus (E - psi) of the material: ');
 E = 36000;
-% v = input('What is the materials poisson ratio (v): ');
 v=0.15;
-t=1;
-
-%%asks user if the analysis should be a quarter or the full circle
-%choice = menu('Please choose analysis option:', 'Full Circle', 'Quarter Circle');
-%ask user for number of elements
-
-% rad_el = input('Number of radial elements: ');
 rad_el = 5;
-
-%tang_el = input('Number of tangential elements: ');
 tang_el = 20;
-
-%%%%want to make this EVEN numbers onlyy and the number must be greater
-%%%%than 4
-ev_check = 0;
-
-while ev_check < 1
-    if mod(tang_el,2) > 0
-        fprintf("\nPlease enter an even number of elements!!! \n");
-        tang_el = input('Number of tangential elements: ');
-    elseif tang_el <= 4 && choice == 1
-        fprintf("\nPlease enter a number greater than or equal to 4!!! \n");
-        tang_el = input('Number of tangential elements: ');
-    elseif mod(tang_el,4)>0 && choice == 2
-        fprintf("\nSince the analysis is for a quarter circle, the number of elements must be in multiples of 4.... \n");
-        tang_el = input('Number of tangential elements: ');
-    else
-        ev_check = 2;
-    end
-end
-
-
-%defscale = input('Enter deformation scale: ');
 defscale = 1;
 
-for yeet = 1:2
-choice = yeet;
+
+% OD = input('Outer radius of the circle (in): ');
+% ID = input('Inner radius of the circle (in): ');
+% %ask user for angle and magnitude of loading
+% qmag = input('Magnitude of surface load q(lbs): ');
+% qang = input('Input angle (in radians) for surface load q: ');
+% ang_check = 0;
+% while ang_check < 0
+%     if qang > 180 || qang < 0
+%         fprintf("\nPlease enter an angle between 0 and 180 \n");
+%         qang = input('Input angle (in radians) for surface load q: ');
+%     else
+%         ang_check = 1;
+%     end
+% end
+% %ask user for material properities
+% E = input('What is the elastic modulus (E - psi) of the material: ');
+% v = input('What is the materials poisson ratio (v): ');
+% %ask user for number of elements
+% rad_el = input('Number of radial elements: ');
+% tang_el = input('Number of tangential elements: ');
+% %%%%want to make this EVEN numbers onlyy and the number must be greater
+% %%%%than 4
+% ev_check = 0;
+% while ev_check < 1
+%     if mod(tang_el,2) > 0
+%         fprintf("\nPlease enter an even number of elements!!! \n");
+%         tang_el = input('Number of tangential elements: ');
+%     elseif tang_el <= 4 && choice == 1
+%         fprintf("\nPlease enter a number greater than or equal to 4!!! \n");
+%         tang_el = input('Number of tangential elements: ');
+%     elseif mod(tang_el,4)>0 && choice == 2
+%         fprintf("\nSince the analysis is for a quarter circle, the number of elements must be in multiples of 4.... \n");
+%         tang_el = input('Number of tangential elements: ');
+%     else
+%         ev_check = 2;
+%     end
+% end
+% defscale = input('Enter deformation scale: ');
+
+
+
+
+qang = qang * pi()/180;
+t=1;
+%choice = yeet;
+%%asks user if the analysis should be a quarter or the full circle
+choice = menu('Please choose analysis option:', 'Full Circle', 'Quarter Circle');
 
 %determines coordinates for full or quarter circle
 switch(choice)
@@ -153,16 +144,22 @@ for qz = 1:rad_el+1
         globnodecords(nodenum, 3) = yy(qz,jz);
         
             %check if angle of end of pressure is in between nodes
-            if (ang1 > (pi()/2 - qang/2)) && (ang1-del_rad < (pi()/2 - qang/2)) && rad1 == OD;
+            if (ang1 ~= (3*pi()/2 - qang/2)) && ((ang1 > (pi()/2 - qang/2)) && (ang1-del_rad < (pi()/2 - qang/2))) && rad1 == OD;
                 partial_load(1,loc1) = temp_el-1;
                 loc1 = loc1 + 1;
-            elseif (ang1 > (pi()/2 + qang/2)) && (ang1-del_rad < (pi()/2 + qang/2)) && rad1 == OD;
+            elseif (ang1 ~= (3*pi()/2 + qang/2)) && ((ang1 > (pi()/2 + qang/2)) && (ang1-del_rad < (pi()/2 + qang/2))) && rad1 == OD;
                 partial_load(1,loc1) = temp_el-1;
                 loc1 = loc1 + 1;
-            elseif (ang1 > (3*pi()/2 - qang/2)) && (ang1-del_rad < (3*pi()/2 - qang/2)) && rad1 == OD;
+            elseif (ang1 ~= (3*pi()/2 - qang/2)) && ((ang1 > (3*pi()/2 - qang/2)) && (ang1-del_rad < (3*pi()/2 - qang/2))) && rad1 == OD;
                 partial_load(1,loc1) = temp_el-1;
                 loc1 = loc1 + 1;
-            elseif (ang1 > (3*pi()/2 + qang/2)) && (ang1-del_rad < (3*pi()/2 + qang/2)) && rad1 == OD;
+            elseif (ang1 ~= (3*pi()/2 + qang/2)) && ((ang1 > (3*pi()/2 + qang/2)) && (ang1-del_rad < (3*pi()/2 + qang/2))) && rad1 == OD;
+                partial_load(1,loc1) = temp_el-1;
+                loc1 = loc1 + 1;
+            elseif (ang1 == (3*pi()/2 + qang/2)) && rad1 == OD;
+                partial_load(1,loc1) = temp_el-1;
+                loc1 = loc1 + 1;
+            elseif (ang1 == (3*pi()/2 - qang/2)) && rad1 == OD;
                 partial_load(1,loc1) = temp_el-1;
                 loc1 = loc1 + 1;
             end
@@ -246,7 +243,7 @@ for i = 1:DofFree %Loop through rows
     end
 end
 
-disp(Kelim);
+%disp(Kelim);
 %
 %Copy values of F corresponding to the free DOFs into Felim.
 %Note that the loop below could've been replaced with Felim(:,1) = F(loc),which would also be faster.
@@ -345,22 +342,27 @@ yz = zeros(1,5);
 
 %% 
 %plotting the data
-
-%original model
 if choice == 1
-   figure('Name','Full Circle','NumberTitle','off') 
+   figure('Name','Full Circle','NumberTitle','off')
+   lim = OD +1;
+   lim2 = -lim;
+
 else
-   figure('Name','Quarter Circle','NumberTitle','off') 
+   figure('Name','Quarter Circle','NumberTitle','off')
+   lim = OD +1;
+   lim2 = 0;
 end
 
 if choice == 1
-    dim1 = 500;
+    dim1 = 50;
 else
     dim1 = 50;
 end
-
 set(gcf,'position',[0,dim1,1800,400])
 subplot(1,3,1)
+
+
+%original model
 for z = 1:NumElem
     for ii = 1:4
         xz(1,ii) = coorx(1,C(z,ii));
@@ -386,13 +388,27 @@ title('Original Model')
 plot(coorx,coory,".",'MarkerFaceColor','black','MarkerEdgeColor','black')
 text(coorx,coory,labels,'HorizontalAlignment','center',...
    'VerticalAlignment','top','fontsize',6)
-lim = OD +1;
-lim2 = -lim;
+
 
 xlim([lim2 lim])
 ylim([lim2 lim])
-hold off
 
+
+xx1 = zeros(1,2);
+yy1 = zeros(1,2);
+for lo = 1:2
+    if lo == 1
+        ang3 = pi()/2-qang/2;
+    else
+        ang3 = pi()/2+qang/2;
+    end
+    xx1(1,1) = (OD+1)*cos(ang3);
+    xx1(1,2) = -(OD+1)*cos(ang3);
+    yy1(1,1) = (OD+1)*sin(ang3);
+    yy1(1,2) = -(OD+1)*sin(ang3);
+    plot(xx1,yy1,"-",'color',[0.5 0.2 0.5])
+end
+hold off
 
 
 %force vectors
@@ -449,4 +465,4 @@ xlim([lim2 lim3])
 ylim([lim2 lim])
 %% 
 %c = uisetcolor
-end
+

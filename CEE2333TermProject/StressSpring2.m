@@ -45,8 +45,8 @@ EMAT = zeros(3,3);
 %HOOKS LAW 2D
 EMAT = EMAT*(1/(1-vpois^2));
 
-fprintf("\nThe Plane Stress [E] matrix is:\n");
-disp(EMAT);
+%fprintf("\nThe Plane Stress [E] matrix is:\n");
+%disp(EMAT);
 
 Wi = [1, 1];
 Wj = [1, 1];

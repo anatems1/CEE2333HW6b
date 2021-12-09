@@ -36,8 +36,8 @@ EMAT = zeros(3,3);
 %HOOKS LAW 2D
 EMAT = EMAT*(1/(1-vpois^2));
 
-fprintf("\nThe Plane Stress [E] matrix is:\n");
-disp(EMAT);
+%fprintf("\nThe Plane Stress [E] matrix is:\n");
+%disp(EMAT);
 
 Wi = [1, 1];
 Wj = [1, 1];
@@ -150,11 +150,11 @@ for  i = 1:NumEle
             ans12 = ['xi',num2str(zt),' = ',num2str(xi)];
             ans3 = ['This is the element B matrix for element NO:',num2str(i),' and gauss Node NO: ',num2str(nodenum)];
             ans1 = ['This is the element stiffness matrix for element NO:',num2str(i),' and gauss Node NO: ',num2str(nodenum)];
-            disp(ans11);
-            disp(ans12);
-
-            disp(ans3);
-            disp(B);
+%             disp(ans11);
+%             disp(ans12);
+% 
+%             disp(ans3);
+%             disp(B);
             
             %disp(ans1);
             %disp(Ktemp);
