@@ -67,29 +67,8 @@ rad_el = 5;
 %tang_el = input('Number of tangential elements: ');
 tang_el = 20;
 
-%%%%want to make this EVEN numbers onlyy and the number must be greater
-%%%%than 4
-ev_check = 0;
-
-while ev_check < 1
-    if mod(tang_el,2) > 0
-        fprintf("\nPlease enter an even number of elements!!! \n");
-        tang_el = input('Number of tangential elements: ');
-    elseif tang_el <= 4 && choice == 1
-        fprintf("\nPlease enter a number greater than or equal to 4!!! \n");
-        tang_el = input('Number of tangential elements: ');
-    elseif mod(tang_el,4)>0 && choice == 2
-        fprintf("\nSince the analysis is for a quarter circle, the number of elements must be in multiples of 4.... \n");
-        tang_el = input('Number of tangential elements: ');
-    else
-        ev_check = 2;
-    end
-end
-
-
 %defscale = input('Enter deformation scale: ');
-defscale = 1;
-
+defscale = 
 for yeet = 1:2
 choice = yeet;
 
@@ -293,12 +272,7 @@ disp("Writing the displacements in the Excel file");
 header = {'Displacements'};
 
 % output results
-if choice == 1
-   fileName = fullfile(pwd, 'ResultsStiffnessMethod_FullCircle.csv');
-else
-   fileName = fullfile(pwd, 'ResultsStiffnessMethod_QuarterCircle.csv');
-end
-
+fileName = fullfile(pwd, 'ResultsStiffnessMethod1.csv');
 fid = fopen(fileName, 'wt');
 % Write headers
 fprintf(fid, 'Displacements\n');
@@ -347,14 +321,9 @@ yz = zeros(1,5);
 %plotting the data
 
 %original model
+f = figure(choice)
 if choice == 1
-   figure('Name','Full Circle','NumberTitle','off') 
-else
-   figure('Name','Quarter Circle','NumberTitle','off') 
-end
-
-if choice == 1
-    dim1 = 500;
+    dim1 = 600;
 else
     dim1 = 50;
 end
