@@ -32,8 +32,8 @@ qang = 45;
 E = 36000;
 v=0.15;
 rad_el = 5;
-tang_el = 32;
-defscale = 1;
+tang_el = 20;
+defscale = 1.5;
 
 
 % OD = input('Outer radius of the circle (in): ');
@@ -80,7 +80,7 @@ defscale = 1;
 
 qang = qang * pi()/180;
 t=1;
-%choice = yeet;
+
 %%asks user if the analysis should be a quarter or the full circle
 choice = menu('Please choose analysis option:', 'Full Circle', 'Quarter Circle');
 intchoice = menu('Please choose integration type:', 'Full integration', 'Reduced integration');
@@ -169,7 +169,6 @@ for qz = 1:rad_el+1
                     loc1 = loc1 + 1;
                 end
             end
-        
         if (choice == 1) && (xx(qz,jz) == OD || xx(qz,jz) == -OD)
             if xx(qz,jz) == OD
                 bcType(nodenum*2) = 1;
@@ -227,7 +226,7 @@ fprintf("Forming stiffness matrix\n\n");
 fprintf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n");
 
     K = StiffnessSpring2(E,C,coorx,coory,t,v,NumElem,NumDof,intchoice);
-    bcValue = circloading(E,C,coorx,coory,t,v,tang_el,NumDof,qmag,qang,bcValue,partial_load,xa,ya,choice,tang_el); %to create the force vector with surface loads
+    bcValue = circloading(E,C,coorx,coory,t,v,tang_el,NumDof,qmag,qang,bcValue,partial_load,xa,ya,choice,tang_el,lock); %to create the force vector with surface loads
 disp("Applying boundary conditions");
 %
 %Eliminate rows and columns to reduce the problem to only free DOFs
