@@ -33,7 +33,7 @@ E = 36000;
 v=0.15;
 rad_el = 5;
 tang_el = 20;
-defscale = 1.5;
+defscale = 1;
 
 
 % OD = input('Outer radius of the circle (in): ');
@@ -343,28 +343,30 @@ fclose(fid);
 
 xz = zeros(1,5);
 yz = zeros(1,5);
+stress1 = zeros(1,5);
 
+xx1 = zeros(1,2);
+yy1 = zeros(1,2);
+mx1 = 0;
 
 %% 
 %plotting the data
 if choice == 1
    figure('Name','Full Circle','NumberTitle','off')
-   lim = OD +1;
+   lim = OD*1.25;
    lim2 = -lim;
-
+   mx1 = tang_el;
+   dim1 = 50;
 else
    figure('Name','Quarter Circle','NumberTitle','off')
-   lim = OD +1;
-   lim2 = 0;
+   lim = OD*1.25;
+   lim2 = -1;
+   mx1 = tang_el/4+1;
+   dim1 = 50
 end
 
-if choice == 1
-    dim1 = 50;
-else
-    dim1 = 50;
-end
-set(gcf,'position',[0,dim1,1800,400])
-subplot(1,3,1)
+set(gcf,'position',[0,dim1,1800,800])
+subplot(2,3,1)
 
 
 %original model
@@ -376,7 +378,7 @@ for z = 1:NumElem
     xz(1,5) = coorx(1,C(z,1));
     yz(1,5) = coory(1,C(z,1));
     
-    plot(xz,yz,"-o",'color',[0.3010 0.7450 0.9330],'MarkerSize',3,...
+    plot(xz,yz,"-o",'color',[0.3010 0.7450 0.9330],'MarkerSize',1,...
     'MarkerEdgeColor','black',...
     'MarkerFaceColor','black')
     hold on
@@ -399,14 +401,14 @@ xlim([lim2 lim])
 ylim([lim2 lim])
 
 
-xx1 = zeros(1,2);
-yy1 = zeros(1,2);
+
 for lo = 1:2
     if lo == 1
         ang3 = pi()/2-qang/2;
     else
         ang3 = pi()/2+qang/2;
     end
+    
     xx1(1,1) = (OD+1)*cos(ang3);
     xx1(1,2) = -(OD+1)*cos(ang3);
     yy1(1,1) = (OD+1)*sin(ang3);
@@ -416,14 +418,8 @@ end
 hold off
 
 
-
-
-
-
-
-
 %force vectors
-subplot(1,3,2)
+subplot(2,3,2)
 for z = 1:NumElem
     for ii = 1:4
         xz(1,ii) = coorx(1,C(z,ii));
@@ -432,7 +428,7 @@ for z = 1:NumElem
     xz(1,5) = coorx(1,C(z,1));
     yz(1,5) = coory(1,C(z,1));
     
-    plot(xz,yz,"-o",'color',[0.3010 0.7450 0.9330],'MarkerSize',3,...
+    plot(xz,yz,"-o",'color',[0.3010 0.7450 0.9330],'MarkerSize',1,...
     'MarkerEdgeColor','black',...
     'MarkerFaceColor','black')
     hold on
@@ -447,14 +443,15 @@ ylim([lim2 lim])
 %get location of equivalent nodal forces and plot on graph
 load_pts = zeros(1,tang_el);
 count = 0;
-for  i = 1:tang_el
+
+for  i = 1:mx1
     for ii = 1:4
-        if(i == partial_load(1,ii))
+        if(i == partial_load(1,ii) || i == partial_load(1,ii) + 1 && choice ==1)
             count = count + 1;
             load_pts(1,count) = i;
         end
     end
-    if (i > partial_load(1,1) && i < partial_load(1,2)) || (i > partial_load(1,3) && i < partial_load(1,4))
+    if (i > partial_load(1,1)+1 && i < partial_load(1,2)) || (i > partial_load(1,3)+1 && i < partial_load(1,4) && choice ==1)
         count = count + 1;
         load_pts(1,count) = i;
     elseif (choice == 2 && i > partial_load(1,1))
@@ -466,22 +463,40 @@ end
 
 loadx = zeros(1,count);
 loady = zeros(1,count);
+loadmagy = zeros(1,count);
 
 for i = 1:count
     loadx(1,i) = coorx(1,load_pts(1,i));
     loady(1,i) = coory(1,load_pts(1,i));
+    loadmagy(1,i) = round(abs(bcValue(load_pts(1,i)*2,1)));
 end
+loadmagy = string(loadmagy);
 
-plot(loadx(1,1:count/2),loady(1,1:count/2),'.')
-text(loadx(1,1:count/2),loady(1,1:count/2),'$\downarrow $','Interpreter','latex')
-plot(loadx(1,count/2:count),loady(1,count/2:count),'.')
-text(loadx(1,count/2:count),loady(1,count/2:count),'$\uparrow $','Interpreter','latex')
+if choice == 1
+plot(loadx(1,1:(count/2)),loady(1,1:count/2),'.')
+text(loadx(1,1:(count/2)),loady(1,1:count/2),'$\downarrow $','Interpreter','latex','HorizontalAlignment','center',...
+   'VerticalAlignment','top','fontsize',12,'fontweight','bold')
+text(loadx(1,1:(count/2)),loady(1,1:count/2),loadmagy(1,1:count/2),'HorizontalAlignment','center',...
+   'VerticalAlignment','bottom','fontsize',8)
+plot(loadx(1,(count/2+1):count),loady(1,count/2+1:count),'.')
+text(loadx(1,(count/2+1):count),loady(1,count/2+1:count),'$\uparrow $','Interpreter','latex','HorizontalAlignment','center',...
+   'VerticalAlignment','bottom','fontsize',12,'fontweight','bold')
+text(loadx(1,(count/2+1):count),loady(1,count/2+1:count),loadmagy(1,1:count/2),'HorizontalAlignment','center',...
+   'VerticalAlignment','top','fontsize',8)
+else
+plot(loadx(1,1:count),loady(1,1:count),'.')
+text(loadx(1,1:count),loady(1,1:count),'$\downarrow $','Interpreter','latex','HorizontalAlignment','center',...
+   'VerticalAlignment','top','fontsize',12)
+text(loadx(1,1:count),loady(1,1:count),loadmagy(1,1:count),'HorizontalAlignment','center',...
+   'VerticalAlignment','bottom','fontsize',8)
+
+end
 
 
 
 
 %displacement field
-subplot(1,3,3)
+subplot(2,3,3)
 for z = 1:NumElem
     for ii = 1:4
         xz(1,ii) = coorx(1,C(z,ii));
@@ -490,7 +505,7 @@ for z = 1:NumElem
     xz(1,5) = coorx(1,C(z,1));
     yz(1,5) = coory(1,C(z,1));
     
-    plot(xz,yz,"-",'color',[0.84 0.84 0.84])
+    plot(xz,yz,"-",'linewidth',2,'color',[0.84 0.84 0.84])
     hold on
 end
 
@@ -501,16 +516,93 @@ for z = 1:NumElem
     end
     xz(1,5) = defcoorx(1,C(z,1));
     yz(1,5) = defcoory(1,C(z,1));
-    
     plot(xz,yz,"-o",'color',[1 0 0],'MarkerSize',3,...
     'MarkerEdgeColor','black',...
     'MarkerFaceColor','black')
     hold on
 end
+
+
+
 lim3 = max(defcoorx(:)) + 1;
 title('Displacement Field')
 xlim([lim2 lim3])
 ylim([lim2 lim])
+
+
+
+%stress field (extra)
+subplot(2,3,4)
+
+for z = 1:NumElem
+    for ii = 1:4
+        xz(1,ii) = defcoorx(1,C(z,ii));
+        yz(1,ii) = defcoory(1,C(z,ii));
+        stress1(1,ii) = Se(1,C(z,ii));
+    end
+    xz(1,5) = defcoorx(1,C(z,1));
+    yz(1,5) = defcoory(1,C(z,1));
+    plot(xz,yz,"-o",'color',[1 0 0],'MarkerSize',3,...
+    'MarkerEdgeColor','black',...
+    'MarkerFaceColor','black')
+     patch(xz,yz,stress1)
+     colorbar
+    hold on
+end
+
+lim3 = max(defcoorx(:)) + 1;
+title('Stress-x')
+xlim([lim2 lim3])
+ylim([lim2 lim])
+
+%stress field (extra)
+subplot(2,3,5)
+
+for z = 1:NumElem
+    for ii = 1:4
+        xz(1,ii) = defcoorx(1,C(z,ii));
+        yz(1,ii) = defcoory(1,C(z,ii));
+        stress1(1,ii) = Se(2,C(z,ii));
+    end
+    xz(1,5) = defcoorx(1,C(z,1));
+    yz(1,5) = defcoory(1,C(z,1));
+    plot(xz,yz,"-o",'color',[1 0 0],'MarkerSize',3,...
+    'MarkerEdgeColor','black',...
+    'MarkerFaceColor','black')
+     patch(xz,yz,stress1)
+     colorbar
+    hold on
+end
+
+lim3 = max(defcoorx(:)) + 1;
+title('Stress-y')
+xlim([lim2 lim3])
+ylim([lim2 lim])
+
+%stress field (extra)
+subplot(2,3,6)
+
+for z = 1:NumElem
+    for ii = 1:4
+        xz(1,ii) = defcoorx(1,C(z,ii));
+        yz(1,ii) = defcoory(1,C(z,ii));
+        stress1(1,ii) = Se(3,C(z,ii));
+    end
+    xz(1,5) = defcoorx(1,C(z,1));
+    yz(1,5) = defcoory(1,C(z,1));
+    plot(xz,yz,"-o",'color',[1 0 0],'MarkerSize',3,...
+    'MarkerEdgeColor','black',...
+    'MarkerFaceColor','black')
+     patch(xz,yz,stress1)
+     colorbar
+    hold on
+end
+
+lim3 = max(defcoorx(:)) + 1;
+title('Stress-xy')
+xlim([lim2 lim3])
+ylim([lim2 lim])
+
 %% 
 %c = uisetcolor
 

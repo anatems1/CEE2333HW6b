@@ -93,7 +93,7 @@ elseif(i >= partial_load(1,3) && i <= partial_load(1,4) && choice == 1)
 
 elseif choice == 2 && i >= partial_load(1,1) && i < tang_el/4 +1
     q = -qmag;
-
+    
 else
     q = 0;
 
@@ -119,12 +119,14 @@ end
     bcValue(C(i,1)*2,1) = bcValue(C(i,1)*2,1) + bcTemp(2,1);
     if choice == 2 && i == tang_el/4
         bcValue(C(i,2)*2,1) = bcValue(C(i,2)*2,1) + bcTemp(4,1)*2;       
-    
     else
         bcValue(C(i,2)*2,1) = bcValue(C(i,2)*2,1) + bcTemp(4,1);
     end 
 end
 
+if choice ==2 
+bcValue(2*(tang_el/4 + 1),1) = 0.5*bcValue(2*(tang_el/4 + 1),1);
+end
 bcValue = bcValue;
 
 
