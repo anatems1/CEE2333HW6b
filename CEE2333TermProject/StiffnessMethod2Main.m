@@ -32,7 +32,7 @@ qang = 45;
 E = 36000;
 v=0.15;
 rad_el = 5;
-tang_el = 20;
+tang_el = 32;
 defscale = 1;
 
 
@@ -83,6 +83,7 @@ t=1;
 %choice = yeet;
 %%asks user if the analysis should be a quarter or the full circle
 choice = menu('Please choose analysis option:', 'Full Circle', 'Quarter Circle');
+intchoice = menu('Please choose integration type:', 'Full integration', 'Reduced integration');
 
 %determines coordinates for full or quarter circle
 switch(choice)
@@ -130,6 +131,7 @@ ya(1,4) = ya(1,3);
 
 temp_el = 0;
 loc1 = 1;
+lock = 0;
 
 for qz = 1:rad_el+1
     rad1 = OD - ((qz-1)*(OD-ID)/rad_el);
@@ -142,26 +144,30 @@ for qz = 1:rad_el+1
         globnodecords(nodenum, 1) = nodenum;;
         globnodecords(nodenum, 2) = xx(qz,jz);
         globnodecords(nodenum, 3) = yy(qz,jz);
-        
+ 
             %check if angle of end of pressure is in between nodes
-            if (ang1 ~= (3*pi()/2 - qang/2)) && ((ang1 > (pi()/2 - qang/2)) && (ang1-del_rad < (pi()/2 - qang/2))) && rad1 == OD;
+            if ang1 == pi()/2 - qang/2 || ang1 == 3*pi()/2 - qang/2  && rad1 == OD;
+                partial_load(1,loc1) = temp_el;
+                loc1 = loc1 + 1;
+                lock = 1;
+            elseif ang1 == pi()/2 + qang/2 || ang1 == 3*pi()/2 + qang/2 && rad1 == OD;
                 partial_load(1,loc1) = temp_el-1;
                 loc1 = loc1 + 1;
-            elseif (ang1 ~= (3*pi()/2 + qang/2)) && ((ang1 > (pi()/2 + qang/2)) && (ang1-del_rad < (pi()/2 + qang/2))) && rad1 == OD;
-                partial_load(1,loc1) = temp_el-1;
-                loc1 = loc1 + 1;
-            elseif (ang1 ~= (3*pi()/2 - qang/2)) && ((ang1 > (3*pi()/2 - qang/2)) && (ang1-del_rad < (3*pi()/2 - qang/2))) && rad1 == OD;
-                partial_load(1,loc1) = temp_el-1;
-                loc1 = loc1 + 1;
-            elseif (ang1 ~= (3*pi()/2 + qang/2)) && ((ang1 > (3*pi()/2 + qang/2)) && (ang1-del_rad < (3*pi()/2 + qang/2))) && rad1 == OD;
-                partial_load(1,loc1) = temp_el-1;
-                loc1 = loc1 + 1;
-            elseif (ang1 == (3*pi()/2 + qang/2)) && rad1 == OD;
-                partial_load(1,loc1) = temp_el-1;
-                loc1 = loc1 + 1;
-            elseif (ang1 == (3*pi()/2 - qang/2)) && rad1 == OD;
-                partial_load(1,loc1) = temp_el-1;
-                loc1 = loc1 + 1;
+                lock = 1;
+            elseif lock == 0; 
+                if (ang1 ~= (3*pi()/2 - qang/2)) && ((ang1 > (pi()/2 - qang/2)) && (ang1-del_rad < (pi()/2 - qang/2))) && rad1 == OD;
+                    partial_load(1,loc1) = temp_el-1;
+                    loc1 = loc1 + 1;
+                elseif (ang1 ~= (3*pi()/2 + qang/2)) && ((ang1 > (pi()/2 + qang/2)) && (ang1-del_rad < (pi()/2 + qang/2))) && rad1 == OD;
+                    partial_load(1,loc1) = temp_el-1;
+                    loc1 = loc1 + 1;
+                elseif (ang1 ~= (3*pi()/2 - qang/2)) && ((ang1 > (3*pi()/2 - qang/2)) && (ang1-del_rad < (3*pi()/2 - qang/2))) && rad1 == OD;
+                    partial_load(1,loc1) = temp_el-1;
+                    loc1 = loc1 + 1;
+                elseif (ang1 ~= (3*pi()/2 + qang/2)) && ((ang1 > (3*pi()/2 + qang/2)) && (ang1-del_rad < (3*pi()/2 + qang/2))) && rad1 == OD;
+                    partial_load(1,loc1) = temp_el-1;
+                    loc1 = loc1 + 1;
+                end
             end
         
         if (choice == 1) && (xx(qz,jz) == OD || xx(qz,jz) == -OD)
@@ -220,7 +226,7 @@ coory = transpose(coory);
 fprintf("Forming stiffness matrix\n\n");
 fprintf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n");
 
-    K = StiffnessSpring2(E,C,coorx,coory,t,v,NumElem,NumDof);
+    K = StiffnessSpring2(E,C,coorx,coory,t,v,NumElem,NumDof,intchoice);
     bcValue = circloading(E,C,coorx,coory,t,v,tang_el,NumDof,qmag,qang,bcValue,partial_load,xa,ya,choice,tang_el); %to create the force vector with surface loads
 disp("Applying boundary conditions");
 %
@@ -268,7 +274,7 @@ displacement(locFree,1) = d; %Write displacements of free DOFs into the displace
 % Evaluate element stresses by calling the appropriate stress function
 % corresponding to the element type.
 
-  Se =StressSpring2(E,C,coorx,coory,t,v,displacement,NumElem);
+  Se =StressSpring2(E,C,coorx,coory,t,v,displacement,NumElem,intchoice);
 
 
 %==============================================================
@@ -411,6 +417,12 @@ end
 hold off
 
 
+
+
+
+
+
+
 %force vectors
 subplot(1,3,2)
 for z = 1:NumElem
@@ -430,6 +442,43 @@ end
 title('Force Vectors')
 xlim([lim2 lim])
 ylim([lim2 lim])
+
+
+
+%get location of equivalent nodal forces and plot on graph
+load_pts = zeros(1,tang_el);
+count = 0;
+for  i = 1:tang_el
+    for ii = 1:4
+        if(i == partial_load(1,ii))
+            count = count + 1;
+            load_pts(1,count) = i;
+        end
+    end
+    if (i > partial_load(1,1) && i < partial_load(1,2)) || (i > partial_load(1,3) && i < partial_load(1,4))
+        count = count + 1;
+        load_pts(1,count) = i;
+    elseif (choice == 2 && i > partial_load(1,1))
+        count = count + 1;
+        load_pts(1,count) = i;
+    end
+
+end
+
+loadx = zeros(1,count);
+loady = zeros(1,count);
+
+for i = 1:count
+    loadx(1,i) = coorx(1,load_pts(1,i));
+    loady(1,i) = coory(1,load_pts(1,i));
+end
+
+plot(loadx(1,1:count/2),loady(1,1:count/2),'.')
+text(loadx(1,1:count/2),loady(1,1:count/2),'$\downarrow $','Interpreter','latex')
+plot(loadx(1,count/2:count),loady(1,count/2:count),'.')
+text(loadx(1,count/2:count),loady(1,count/2:count),'$\uparrow $','Interpreter','latex')
+
+
 
 
 %displacement field

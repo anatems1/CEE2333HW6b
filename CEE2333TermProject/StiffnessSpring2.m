@@ -1,4 +1,4 @@
-function [ K ] = StiffnessSpring(Emod,C,coorx,coory,area,v,NumEle,NumDof)
+function [ K ] = StiffnessSpring(Emod,C,coorx,coory,area,v,NumEle,NumDof,intchoice)
 %
 % Stiffness matrix for each rod element 
 %
@@ -39,9 +39,15 @@ EMAT = EMAT*(1/(1-vpois^2));
 %fprintf("\nThe Plane Stress [E] matrix is:\n");
 %disp(EMAT);
 
-Wi = [1, 1];
-Wj = [1, 1];
-t_gs = [-1/sqrt(3),1/sqrt(3)];
+if intchoice == 1
+   Wi = [1, 1];
+   Wj = [1, 1];
+   t_gs = [-1/sqrt(3),1/sqrt(3)]; 
+else
+   Wi = [2, 0];
+   Wj = [2, 0];
+   t_gs = [0,0]; 
+end
 
 K = zeros(NumDof,NumDof);
 Ktemp = zeros(8,8);
@@ -53,13 +59,15 @@ for  i = 1:NumEle
     locx = zeros(1,4);
     locy = zeros(1,4);
     
+    
+    %retrieve x and y coordinates at each element from connectivity data
     for ji = 1:4
         locx(1,ji) = coorx(1,C(i,ji));
         locy(1,ji) = coory(1,C(i,ji));
     end
     
     for zt = 1:2
-        nu = (t_gs(1,zt));%*2 + 2)/2;
+        nu = (t_gs(1,zt));%*2 + 2)/2;  gauss nu value
         for xt = 1:2
             xi = (t_gs(1,xt));%*2 + 2)/2;
 
@@ -121,7 +129,7 @@ for  i = 1:NumEle
 
             B = B1*B2*B3;
 
-            Ktemp = Wi(1,zt)*Wj(1,zt)*(transpose(B)*EMAT)*B*det(J);
+            Ktemp = Wi(1,xt)*Wj(1,xt)*(transpose(B)*EMAT)*B*det(J);
            
             
             %convert local stiffness to global stiffness
