@@ -78,7 +78,6 @@ end
 
 
 %determine length of member (surface)
-
 %L = sqrt((coorx(1,C(i,2)) - coorx(1,C(i,1)))^2 + (coory(1,C(i,2)) - coory(1,C(i,1)))^2);
 L = abs(coorx(1,C(i,2)) - coorx(1,C(i,1)));
 
@@ -99,17 +98,15 @@ else
 
 end
 
-
-
 %intergrate and determine loading at nodes
     %xi = ((t_gs(1,xt))*(bdb-bda) + (bdb-bda))/2;
 
     %N1 = 0.25*(1-xi)*(1-(-1));
     %N2 = 0.25*(1+xi)*(1-(-1));
-    int_N1 = 0.5*((bdb - bdb^2/2) - (bda - bda^2/2));
+    int_N1 = 0.5*((bdb - bdb^2/2) - (bda - bda^2/2)); %integrated shape functions
     int_N2 = 0.5*((bdb + bdb^2/2) - (bda + bda^2/2));
 
-    N = [int_N1, 0, int_N2, 0 ; 0, int_N1, 0, int_N2];
+    N = [int_N1, 0, int_N2, 0 ; 0, int_N1, 0, int_N2]; %surface shape function matrix
     N = transpose(N);
 
     q_mat = [0; q];
